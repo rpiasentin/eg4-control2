@@ -1,4 +1,11 @@
-"""Simple FastAPI backend for EG4 Float Control demo"""
+import webbrowser
+@app.on_event("startup")
+async def _startup():
+    asyncio.create_task(sampler())
+    webbrowser.open("http://localhost:8000/web/index.html")
+    log("backend started")
+    
+""Simple FastAPI backend for EG4 Float Control demo"""
 import asyncio, os, time, random
 from fastapi import FastAPI
 from pydantic import BaseModel
