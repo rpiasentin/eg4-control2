@@ -1,0 +1,24 @@
+name: Deploy Web UI to GitHub Pages
+
+on:
+  push:
+    branches: [ "web-ui" ]
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy web folder
+        run: |
+          mkdir -p public
+          cp -r web/* public/
+      - name: Publish to Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
