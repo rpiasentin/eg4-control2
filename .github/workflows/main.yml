@@ -1,0 +1,20 @@
+name: Build Windows EXE (REL2)
+
+on:
+  push:
+    branches: [ "win-app" ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install pyinstaller fastapi uvicorn[standard]
+      - name: Build EXE
+        run: pyinstaller backend/main.py --onefile --name eg4app_REL2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eg4app_REL2_windows
+          path: dist/eg4app_REL2.exe
