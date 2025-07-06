@@ -1,0 +1,24 @@
+name: Build macOS .app (REL2)
+
+on:
+  push:
+    branches: [ "mac-app" ]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install pyinstaller fastapi uvicorn[standard]
+      - name: Build .app bundle
+        run: |
+          pyinstaller backend/main.py --onefile --windowed --name "EG4 Float Ctl REL2"
+          ditto -c -k --sequesterRsrc --keepParent \
+                "dist/EG4 Float Ctl REL2.app" \
+                eg4app_REL2_mac.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eg4app_REL2_mac
+          path: eg4app_REL2_mac.zip
